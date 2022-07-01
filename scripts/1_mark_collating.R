@@ -1,7 +1,14 @@
 
 # Setup -------------------------------------------------------------------
 
-
+# make folders if they don't already exist
+required_dirs <- c('data','data/raw_data', 'data/processed_data', 
+                  'figures', 'results')
+for(d in (required_dirs)){
+  if(!dir.exists(d)){
+    dir.create(d)
+  }
+}
 
 # Code by Dave Hemprich-Bennett, leaning heavily 
 # on the book R for Data Science https://r4ds.had.co.nz/relational-data.html

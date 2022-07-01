@@ -12,6 +12,9 @@ for(d in (required_dirs)){
 
 # Code by Dave Hemprich-Bennett, leaning heavily 
 # on the book R for Data Science https://r4ds.had.co.nz/relational-data.html
+
+# read in packages
+
 library(tidyverse)
 library(readxl)
 library(janitor)

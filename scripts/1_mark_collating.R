@@ -29,6 +29,15 @@ marksheet_paths <- list.files(path = 'data/raw_data',
 # # remove b8 and b19 and b17
 #marksheet_paths <- marksheet_paths[-grep('B8|B19|B17|B18', marksheet_paths)]
 
+
+# as formatting has been an issue with reading in some files, because
+# some had incorrectly named sheets, print the name of each file and give
+# an error immediately after if it fails
+for(f in 1:length(marksheet_paths)){
+  print(marksheet_paths[f])
+  read_excel(marksheet_paths[f], sheet = 'Marks')
+}
+
 # read all of the files at the above paths
 spreadsheets_list <- lapply(marksheet_paths, 
                             function(x) 

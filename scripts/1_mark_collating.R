@@ -195,21 +195,23 @@ ggsave('figures/boxplot.pdf', all_distribution)
 
 # Make summaries of what modules each student took ------------------------
 
-paper_list <- list()
+papers_sat <- combined_sheet %>%
+  # grab only the columns we want
+  select(candidate_no, paper_series, paper, ) %>%
+  # make a duplicate column for when we pivot_wider
+  mutate(fill_col = paper) %>%
+  # make the data wide, rather than long
+  pivot_wider(names_from = paper, values_from = fill_col) %>%
+  unite(col = temp_col, -c(candidate_no, paper_series), sep = ',') %>%
+  # we now have a column with all the papers that candidate sat, but 
+  # a tonne of unwanted NAs and columns. Lets fix that
+  mutate(temp_col = gsub('NA,|NA', '', temp_col)) %>%
+  # now separate that one column out into 6 columns
+  separate(temp_col, into = paste('paper', seq(1,6), sep = '_'),
+           sep = ',')
 
-for(i in 1:length(exam_types)){
-  exam <- exam_types[i]
-  all_students <- filter(combined_sheet, paper_series == exam)
-  student_ids <- unique(all_students$candidate_no)
-  out_list <- list()
-  for(j in 1:length(student_ids)){
-    student <- student_ids[j]
-    papers <- filter(all_students, candidate_no == student) %>%
-      pull(paper)
-    out_list[[j]] <- c(student, papers)
-  }
-  paper_list[[i]] <- out_list
-}
+write_csv(papers_sat, path = 'data/processed_data/papers_sat.csv')
+
 
 three_yp <- read_excel('data/raw_data/3YP.xlsx') %>%
   rename(student_no = `Candidate No`) %>%
